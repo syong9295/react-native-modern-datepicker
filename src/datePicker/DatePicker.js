@@ -1,4 +1,4 @@
-import React, {createContext, useReducer, useContext, useState} from 'react';
+import React, {createContext, useReducer, useContext, useState, useEffect} from 'react';
 import {View, StyleSheet} from 'react-native';
 import PropTypes from 'prop-types';
 
@@ -50,15 +50,18 @@ const DatePicker = props => {
     utils: calendarUtils,
     state: useReducer(reducer, {
       activeDate: props.current || calendarUtils.getToday(),
-      selectedDate: props.selected
-        ? calendarUtils.getFormated(calendarUtils.getDate(props.selected))
-        : '',
+      selectedDate,
       monthOpen: props.mode === 'monthYear',
       timeOpen: props.mode === 'time',
     }),
   };
+  const [selectedDate, setSelectedDate] = useState('');
   const [minHeight, setMinHeight] = useState(300);
   const style = styles(contextValue.options);
+
+  useEffect(() => {
+    setSelectedDate(calendarUtils.getFormated(calendarUtils.getDate(props.selected)));
+  }, [props.selected]);
 
   const renderBody = () => {
     switch (contextValue.mode) {
