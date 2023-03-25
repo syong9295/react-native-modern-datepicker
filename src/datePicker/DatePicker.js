@@ -43,24 +43,27 @@ const useCalendar = () => {
 
 const DatePicker = props => {
   const calendarUtils = new utils(props);
+  const reducerValue = useReducer(reducer, {
+    activeDate: props.current || calendarUtils.getToday(),
+    selectedDate: props.selected
+    ? calendarUtils.getFormated(calendarUtils.getDate(props.selected))
+    : '',
+    monthOpen: props.mode === 'monthYear',
+    timeOpen: props.mode === 'time',
+  });
   const contextValue = {
     ...props,
     reverse: props.reverse === 'unset' ? !props.isGregorian : props.reverse,
     options: {...options, ...props.options},
     utils: calendarUtils,
-    state: useReducer(reducer, {
-      activeDate: props.current || calendarUtils.getToday(),
-      selectedDate,
-      monthOpen: props.mode === 'monthYear',
-      timeOpen: props.mode === 'time',
-    }),
+    state: reducerValue,
   };
-  const [selectedDate, setSelectedDate] = useState('');
   const [minHeight, setMinHeight] = useState(300);
   const style = styles(contextValue.options);
 
   useEffect(() => {
-    setSelectedDate(calendarUtils.getFormated(calendarUtils.getDate(props.selected)));
+    const [state, dispatch] = reducerValue;
+    dispatch({ type: 'set', selectedDate: calendarUtils.getFormated(calendarUtils.getDate(props.selected))});
   }, [props.selected]);
 
   const renderBody = () => {
