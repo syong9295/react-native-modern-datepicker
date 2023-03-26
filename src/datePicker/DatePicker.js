@@ -1,4 +1,4 @@
-import React, {createContext, useReducer, useContext, useState, useEffect} from 'react';
+import React, {createContext, useReducer, useContext, useState, useEffect, useRef} from 'react';
 import {View, StyleSheet} from 'react-native';
 import PropTypes from 'prop-types';
 
@@ -55,19 +55,17 @@ const DatePicker = props => {
       : '',
       monthOpen: props.mode === 'monthYear',
       timeOpen: props.mode === 'time',
-    }),
+    })
   };
   const [minHeight, setMinHeight] = useState(300);
   const style = styles(contextValue.options);
 
+  // reflect changes to props.selected
   useEffect(() => {
     const [mainState, setMainState] = contextValue.state;
-    const selectedDate = new Date(props.selected);
-    selectedDate.setDate(selectedDate.getDate() + 1);
-    const newSelectedDate = selectedDate.toISOString().slice(0, 10);
     setMainState({
       type: 'set',
-      selectedDate: calendarUtils.getFormated(calendarUtils.getDate(newSelectedDate))
+      selectedDate: props.selected.toLocaleString().replace(/-/g, '/'),
     });
   }, [props.selected]);
 
