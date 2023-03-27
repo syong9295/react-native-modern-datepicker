@@ -55,7 +55,8 @@ const DatePicker = props => {
       : '',
       monthOpen: props.mode === 'monthYear',
       timeOpen: props.mode === 'time',
-    })
+    }),
+    triggerChangeMonthAnim: null
   };
   const [minHeight, setMinHeight] = useState(300);
   const style = styles(contextValue.options);
@@ -63,9 +64,28 @@ const DatePicker = props => {
   // reflect changes to props.selected
   useEffect(() => {
     const [mainState, setMainState] = contextValue.state;
+    const oldDate = mainState.selectedDate;
+    const newDate = props.selected.toLocaleString().replace(/-/g, '/');
+    let triggerChangeMonthAnim = null;
+
+    if (oldDate !== newDate) {
+      const oldDateMonth = parseInt(oldDate.split('/')[1]);
+      const oldDateYear = parseInt(oldDate.split('/')[0]);
+
+      const newDateMonth = parseInt(newDate.split('/')[1]);
+      const newDateYear = parseInt(newDate.split('/')[0]);
+
+      if (oldDateYear < newDateYear || (oldDateYear === newDateYear && oldDateMonth < newDateMonth)) {
+        triggerChangeMonthAnim = 'NEXT';
+      } else if (oldDateYear > newDateYear || (oldDateYear === newDateYear && oldDateMonth > newDateMonth)) {
+        triggerChangeMonthAnim = 'PREVIOUS';
+      }
+    }
+
     setMainState({
       type: 'set',
-      selectedDate: props.selected.toLocaleString().replace(/-/g, '/'),
+      selectedDate: newDate,
+      triggerChangeMonthAnim,
     });
   }, [props.selected]);
 

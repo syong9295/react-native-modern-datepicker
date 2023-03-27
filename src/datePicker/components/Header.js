@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import PropTypes from 'prop-types';
 import {View, TouchableOpacity, Text, Image, StyleSheet, Animated, I18nManager} from 'react-native';
 
@@ -29,6 +29,11 @@ const Header = ({changeMonth}) => {
   const nextDisable =
     disableDateChange ||
     (maximumDate && utils.checkArrowMonthDisabled(mainState.activeDate, false));
+
+    useEffect(() => {
+      const type = mainState.triggerChangeMonthAnim;
+      type && onChangeMonth(type);
+    }, [mainState.triggerChangeMonthAnim]);
 
   const onChangeMonth = (type) => {
     if (disableChange) return;
