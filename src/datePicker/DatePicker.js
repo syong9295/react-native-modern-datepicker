@@ -171,6 +171,8 @@ DatePicker.defaultProps = {
   options: {},
   mode: 'datepicker',
   minuteInterval: 5,
+  dayNamesShort: ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'],
+  monthNames: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
   style: {},
 };
 
@@ -192,6 +194,9 @@ DatePicker.propTypes = {
   options: PropTypes.shape(optionsShape),
   mode: PropTypes.oneOf(modeArray),
   minuteInterval: PropTypes.oneOf(minuteIntervalArray),
+  style: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
+  dayNamesShort: PropTypes.arrayOf(PropTypes.string),
+  monthNames: PropTypes.arrayOf(PropTypes.string),
   style: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
 };
 

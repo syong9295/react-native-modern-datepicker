@@ -29,42 +29,45 @@ const jalaaliConfigs = {
   timeSelect: 'انتخاب',
   timeClose: 'بستن',
 };
-const gregorianConfigs = {
-  dayNames: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
-  dayNamesShort: ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'],
-  monthNames: [
-    'January',
-    'February',
-    'March',
-    'April',
-    'May',
-    'June',
-    'July',
-    'August',
-    'September',
-    'October',
-    'November',
-    'December',
-  ],
-  selectedFormat: 'YYYY/MM/DD',
-  dateFormat: 'YYYY/MM/DD',
-  monthYearFormat: 'YYYY MM',
-  timeFormat: 'HH:mm',
-  hour: 'Hour',
-  minute: 'Minute',
-  timeSelect: 'Select',
-  timeClose: 'Close',
-};
 
 class utils {
-  constructor({minimumDate, maximumDate, isGregorian, mode, reverse, configs}) {
+  gregorianConfigs = {
+    dayNames: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
+    dayNamesShort: ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'],
+    monthNames: [
+      'January',
+      'February',
+      'March',
+      'April',
+      'May',
+      'June',
+      'July',
+      'August',
+      'September',
+      'October',
+      'November',
+      'December',
+    ],
+    selectedFormat: 'YYYY/MM/DD',
+    dateFormat: 'YYYY/MM/DD',
+    monthYearFormat: 'YYYY MM',
+    timeFormat: 'HH:mm',
+    hour: 'Hour',
+    minute: 'Minute',
+    timeSelect: 'Select',
+    timeClose: 'Close',
+  };
+
+  constructor({minimumDate, maximumDate, isGregorian, mode, reverse, configs, dayNamesShort, monthNames}) {
     this.data = {
       minimumDate,
       maximumDate,
       isGregorian,
       reverse: reverse === 'unset' ? !isGregorian : reverse,
     };
-    this.config = isGregorian ? gregorianConfigs : jalaaliConfigs;
+    this.gregorianConfigs.dayNamesShort = dayNamesShort;
+    this.gregorianConfigs.monthNames = monthNames;
+    this.config = isGregorian ? this.gregorianConfigs : jalaaliConfigs;
     this.config = {...this.config, ...configs};
     if (mode === 'time' || mode === 'datepicker') {
       this.config.selectedFormat = this.config.dateFormat + ' ' + this.config.timeFormat;
